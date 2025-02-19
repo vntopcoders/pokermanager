@@ -60,9 +60,11 @@ const PokerManager = () => {
         if (player.id === id) {
           const updatedPlayer = {
             ...player,
-            [field]: parseInt(value) || 0
+            [field]: field === 'name' ? value : (parseInt(value) || 0)
           };
-          updatedPlayer.score = calculateScore(updatedPlayer);
+          if (field !== 'name') {
+            updatedPlayer.score = calculateScore(updatedPlayer);
+          }
           return updatedPlayer;
         }
         return player;
@@ -98,13 +100,14 @@ const PokerManager = () => {
                 {sortedPlayers.map((player) => (
                   <tr key={player.id} className="border-b">
                     <td className="p-2">
-                      <input
-                        type="text"
-                        value={player.name}
-                        onChange={(e) => updatePlayer(player.id, 'name', e.target.value)}
-                        className="w-full p-1 border rounded"
-                      />
-                    </td>
+                        <input
+                            type="text"
+                            value={player.name}
+                            onChange={(e) => updatePlayer(player.id, 'name', e.target.value)}
+                            className="w-full p-1 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            placeholder="Nhập tên..."
+                        />
+                        </td>
                     <td className="p-2">
                       <input
                         type="number"

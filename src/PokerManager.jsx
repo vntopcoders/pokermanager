@@ -58,13 +58,20 @@ const PokerManager = () => {
     setPlayers(prevPlayers => {
       return prevPlayers.map(player => {
         if (player.id === id) {
+          // Xử lý đặc biệt cho input số
+          let newValue = value;
+          if (field === 'initialBI' || field === 'currentChips') {
+            // Loại bỏ số 0 ở đầu và chuyển đổi sang số
+            newValue = value ? parseInt(value.replace(/^0+/, '')) || 0 : 0;
+          } else if (field !== 'name') {
+            newValue = parseInt(value) || 0;
+          }
+  
           const updatedPlayer = {
             ...player,
-            [field]: field === 'name' ? value : (parseInt(value) || 0)
+            [field]: newValue
           };
-          if (field !== 'name') {
-            updatedPlayer.score = calculateScore(updatedPlayer);
-          }
+          updatedPlayer.score = calculateScore(updatedPlayer);
           return updatedPlayer;
         }
         return player;
@@ -107,15 +114,16 @@ const PokerManager = () => {
                             className="w-full p-1 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                             placeholder="Nhập tên..."
                         />
-                        </td>
+                    </td>
                     <td className="p-2">
-                      <input
-                        type="number"
-                        value={player.initialBI}
-                        onChange={(e) => updatePlayer(player.id, 'initialBI', e.target.value)}
-                        className="w-24 p-1 border rounded text-center mx-auto block"
-                        min="0"
-                      />
+                        <input
+                            type="number"
+                            value={player.initialBI || ''}  {/* Thêm || '' để tránh hiển thị 0 khi không có giá trị */}
+                            onChange={(e) => updatePlayer(player.id, 'initialBI', e.target.value)}
+                            className="w-24 p-1 border rounded text-center mx-auto block"
+                            min="0"
+                            placeholder="0"  {/* Thêm placeholder thay vì giá trị mặc định */}
+                        />
                     </td>
                     <td className="p-2">
                       <input

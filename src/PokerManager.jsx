@@ -80,7 +80,7 @@ const PokerManager = () => {
   };
 
   // Sắp xếp người chơi theo điểm
-  const sortedPlayers = [...players].sort((a, b) => b.score - a.score);
+//   const sortedPlayers = [...players].sort((a, b) => b.score - a.score);
 
   return (
     <div className="p-4 max-w-6xl mx-auto">
@@ -104,7 +104,7 @@ const PokerManager = () => {
                 </tr>
               </thead>
               <tbody>
-                {sortedPlayers.map((player) => (
+                {players.map((player) => (
                   <tr key={player.id} className="border-b">
                     <td className="p-2">
                         <input

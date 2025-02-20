@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Plus, Minus } from 'lucide-react';
 
 const PokerManager = () => {
-  const MIN_BI = 7500; // Minimum Buy-in
 
   const [players, setPlayers] = useState(() => {
     const initialPlayers = [];
@@ -22,17 +21,15 @@ const PokerManager = () => {
   // Tính điểm cho người chơi
   const calculateScore = (player) => {
     const profit = player.currentChips - player.initialBI;
+    const minBI = 7500; // Minimum Buy-in
     
     // Tính điểm trừ do thua all-in (3 điểm mỗi lần)
     const allInPenalty = player.allInLosses * 3;
-
-    if (profit >= 0) {
-      // Công thức cho người thắng: 150 × profit/(profit + initialBI)
-      return (150 * profit / (profit + player.initialBI)) - allInPenalty;
-    } else {
-      // Công thức cho người thua: -100 × profit/(profit + initialBI)
-      return (-100 * Math.abs(profit) / (Math.abs(profit) + player.initialBI)) - allInPenalty;
-    }
+  
+    // Công thức chung cho cả thắng và thua
+    const score = profit * minBI * 2 / (minBI * 2 + player.initialBI) / 100;
+    
+    return score - allInPenalty;
   };
 
   // Cập nhật số lần thua all-in
